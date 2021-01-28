@@ -1,0 +1,22 @@
+FROM alpine:edge
+
+\# Configure Go
+ENV GOROOT /usr/lib/go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
+
+# Configure opendistro
+ENV ODFE_ENDPOINT https://localhost:9200
+ENV ODFE_USER admin
+ENV ODFE_PASSWORD admin
+
+RUN apk add --no-cache --update npm musl-dev go openssl npmi git
+# Download and Build ODFE Command Line Interface
+WORKDIR /go/src
+RUN git clone https://github.com/opendistro-for-elasticsearch/odfe-cli
+WORKDIR /go/src/odfe-cli
+RUN go build .
+RUN chmod +x ./odfe-cli
+RUN ln -s /go/src/odfe-cli/odfe-cli /usr/local/bin/odfe-cli
+# Install Performance Analyzer
+RUN npm install -g @aws/opendistro-for-elasticsearch-perftop
