@@ -5,7 +5,7 @@ Dockerfile :
 ```dockerfile
 FROM alpine:edge
 
-\# Configure Go
+# Configure Go
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
 ENV PATH /go/bin:$PATH
@@ -15,7 +15,7 @@ ENV ODFE_ENDPOINT https://localhost:9200
 ENV ODFE_USER admin
 ENV ODFE_PASSWORD admin
 
-RUN apk add --no-cache --update npm musl-dev go openssl npmi git
+RUN apk add --no-cache --update npm musl-dev go openssl npm git curl jq
 # Download and Build ODFE Command Line Interface
 WORKDIR /go/src
 RUN git clone https://github.com/opendistro-for-elasticsearch/odfe-cli
@@ -33,7 +33,11 @@ Docker image :
 $ docker image pull ahmedaminesoltani/leadwire-tests:toolbox-odfe-v2
 ```
 
-all commands above are supposed to be executed in
+Run your image as a container :
+
+```bash
+$ docker run -it --network container:odfe-node1 ahmedaminesoltani/leadwire-tests:toolbox-odfe-v2 /bin/sh
+```
 
 #### odfe-cli
 
@@ -58,7 +62,7 @@ Create default profile
 
 ```bash
 $ odfe-cli profile create
-Enter profile's name: default
+Enter profile'\s name: default
 Elasticsearch Endpoint: https://localhost:9200  
 User Name: admin
 Password: admin

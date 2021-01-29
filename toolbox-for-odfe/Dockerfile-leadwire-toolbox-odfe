@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-\# Configure Go
+# Configure Go
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
 ENV PATH /go/bin:$PATH
@@ -10,7 +10,7 @@ ENV ODFE_ENDPOINT https://localhost:9200
 ENV ODFE_USER admin
 ENV ODFE_PASSWORD admin
 
-RUN apk add --no-cache --update npm musl-dev go openssl npmi git
+RUN apk add --no-cache --update npm musl-dev go openssl npm git curl jq
 # Download and Build ODFE Command Line Interface
 WORKDIR /go/src
 RUN git clone https://github.com/opendistro-for-elasticsearch/odfe-cli
