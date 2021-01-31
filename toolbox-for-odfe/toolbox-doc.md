@@ -25,18 +25,24 @@ RUN chmod +x ./odfe-cli
 RUN ln -s /go/src/odfe-cli/odfe-cli /usr/local/bin/odfe-cli
 # Install Performance Analyzer
 RUN npm install -g @aws/opendistro-for-elasticsearch-perftop
+# Generate node and client certificates script
+WORKDIR /cert
+RUN wget https://raw.githubusercontent.com/Ahmed-Amine-Soltani/trabajo/main/toolbox-for-odfe/gen-cert.sh
+RUN chmod +x ./gen-cert.sh
 ```
 
 Docker image :
 
 ```bash
-$ docker image pull ahmedaminesoltani/leadwire-tests:toolbox-odfe-v2
+$ docker image pull ahmedaminesoltani/leadwire-tests:toolbox-odfe-v3
 ```
 
-Run your image as a container :
+
+
+Run your image as a container and attach it to the network of our odfe master containersetup
 
 ```bash
-$ docker run -it --network container:odfe-node1 ahmedaminesoltani/leadwire-tests:toolbox-odfe-v2 /bin/sh
+$ docker run -it --network container:odfe-node1 ahmedaminesoltani/leadwire-tests:toolbox-odfe-v3 /bin/sh
 ```
 
 #### odfe-cli
@@ -62,7 +68,7 @@ Create default profile
 
 ```bash
 $ odfe-cli profile create
-Enter profile'\s name: default
+Enter profile\'s name: default
 Elasticsearch Endpoint: https://localhost:9200  
 User Name: admin
 Password: admin
@@ -226,4 +232,38 @@ $ perf-top --dashboard ClusterOverview  --endpoint http://localhost:9600 --logfi
 - NodeAnalysis
 
 you can create your own dashboard [link](https://opendistro.github.io/for-elasticsearch-docs/docs/pa/dashboards/)
+
+
+
+#### Security configuration [link](https://opendistro.github.io/for-elasticsearch-docs/docs/security/configuration/)
+
+[Generate](https://opendistro.github.io/for-elasticsearch-docs/docs/security/configuration/generate-certificates/) node and client certificates
+
+Run the toolbox container , mount a volume 'setup-ssl'  , [generate](https://aws.amazon.com/blogs/opensource/add-ssl-certificates-open-distro-for-elasticsearch/) the certificates in this volume, these certificates will be used in odfe docker-compose file
+
+```bash
+$ docker run -it -v ~/Documents/LeadWire/leadwire-deploy-k8s/toolbox-for-odfe/setup-ssl:/mnt ahmedaminesoltani/leadwire-tests:toolbox-odfe-v3 /bin/sh
+$ pwd
+/cert
+$ cd /mnt
+$ sh /cert/gen-cert.sh 
+Generating RSA private key, 2048 bit long modulus (2 primes)
+......................+++++
+.......+++++
+e is 65537 (0x010001)
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:
+                                                         ...
+                                                         ...
+$ ls
+admin-key.pem    admin.pem        node-key.pem     node.pem         root-ca-key.pem  root-ca.pem      root-ca.srl
+
+
+```
 

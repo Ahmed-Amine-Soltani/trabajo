@@ -20,3 +20,7 @@ RUN chmod +x ./odfe-cli
 RUN ln -s /go/src/odfe-cli/odfe-cli /usr/local/bin/odfe-cli
 # Install Performance Analyzer
 RUN npm install -g @aws/opendistro-for-elasticsearch-perftop
+# Generate node and client certificates script
+WORKDIR /cert
+RUN wget https://raw.githubusercontent.com/Ahmed-Amine-Soltani/trabajo/main/toolbox-for-odfe/gen-cert.sh
+RUN chmod +x ./gen-cert.sh
