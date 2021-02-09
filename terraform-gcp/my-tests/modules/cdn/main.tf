@@ -1,18 +1,18 @@
-#terraform {
-  #required_version = ">= 0.13.5"
+terraform {
+  required_version = ">= 0.13.5"
 
-  #required_providers {
-    #google = {
-      #source  = "hashicorp/google"
-      #version = "~> 3.52.0"
-    #}
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 3.52.0"
+    }
 
-    #google-beta = {
-      #source  = "hashicorp/google-beta"
-      #version = "~> 3.52.0"
-    #}
-  #}
-#}
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 3.52.0"
+    }
+  }
+}
 
 provider "google" {
   credentials = file("probable-byway-303616-ab9027296709.json")
