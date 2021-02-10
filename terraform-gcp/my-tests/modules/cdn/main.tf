@@ -15,15 +15,141 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("probable-byway-303616-ab9027296709.json")
+  credentials = file("./probable-byway-303616-ab9027296709.json")
   project = var.google_project
   region = var.region 
   zone = var.zone
 }
 
-resource "google_compute_network" "vpc_network" {
- name = "terraform-network" 
+
+
+#resource "google_storage_bucket" "bucket" {
+resource "google_storage_bucket" "static-site" {
+#  name = "bucket-detect-tn"
+  name = "bucket.detect.tn"
+  location = "australia-southeast1"
+  storage_class = "STANDARD"
+  #uniform_bucket_level_access = true
+  website {
+    main_page_suffix = "index.html"
+    #not_found_page   = "404.html"
+  }
 }
+
+resource "google_storage_bucket_object" "object" {
+  name   = "public-object"
+ # bucket = google_storage_bucket.bucket.name
+  bucket = google_storage_bucket.static-site.name
+ # source = "website-files/images/banner.jpg"
+}
+
+resource "null_resource" "upload_folder_content" {
+ triggers = {
+   file_hashes = jsonencode({
+   for fn in fileset(var.folder_path, "**") :
+   fn => filesha256("${var.folder_path}/${fn}")
+   })
+ }
+
+ provisioner "local-exec" {
+   command = "gsutil cp -r ${var.folder_path}/* gs://${google_storage_bucket.static-site.nam}/"
+ }
+
+}
+
+
+
+
+
+
+resource "google_storage_default_object_access_control" "public_rule" {
+  #bucket = google_storage_bucket.bucket.name
+  bucket = google_storage_bucket.static-site.name
+  role   = "READER"
+  entity = "allUsers"
+}
+
+
+
+resource "google_compute_global_address" "default" {
+  name = "global-appserver-ip"
+}
+
+
+
+resource "google_dns_record_set" "a" {
+  name         = "backend.ahmedamine-soltani.lab.innovorder.dev.detect.tn."
+  managed_zone = "ahmedamine-soltani-lab-innovorder-dev"
+  type         = "A"
+  ttl          = 300
+
+  rrdatas = [google_compute_global_address.default.address]
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#resource "google_storage_default_object_access_control" "public_rule" {
+  ##bucket = google_storage_bucket.bucket.name
+  #bucket = google_storage_bucket.static-site.name
+  #role   = "READER"
+  #entity = "allUsers"
+#}
+
+
+
+
+#resource "google_storage_bucket_iam_member" "member" {
+  #bucket = google_storage_bucket.static-site.name
+  #role = "roles/storage.admin"
+  #member = "allUsers"
+#}
+
+
+
+
+#resource "google_compute_network" "vpc_network" {
+ #name = "terraform-network" 
+#}
 
 #terraform {
 #  backend "gcs" {

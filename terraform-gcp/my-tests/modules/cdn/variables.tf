@@ -17,6 +17,13 @@ variable zone {
 
 }
 
+variable "folder_path" {
+ type        = string
+ description = "Path to your folder"
+ default = "./website-files"
+
+}
+
 
 
 
