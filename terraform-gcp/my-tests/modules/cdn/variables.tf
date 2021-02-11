@@ -24,6 +24,11 @@ variable "folder_path" {
 
 }
 
+variable key {
+  type        = string
+  default = "probable-byway-303616-ab9027296709.json"
+
+}
 
 
 
