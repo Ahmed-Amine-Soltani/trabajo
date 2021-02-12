@@ -1,0 +1,90 @@
+terraform {
+  required_version = ">= 0.13.5"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 3.52.0"
+    }
+
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 3.52.0"
+    }
+  }
+}
+
+provider "google" {
+  credentials = file(var.key)
+  project = var.google_project
+  region = var.region 
+  zone = var.zone
+}
+
+
+
+#resource "google_storage_bucket" "bucket" {
+resource "google_storage_bucket" "static-site" {
+#  name = "bucket-detect-tn"
+  name = "bucket.detect.tn"
+  location = "australia-southeast1"
+  storage_class = "STANDARD"
+  force_destroy = true
+  uniform_bucket_level_access = false
+  website {
+    main_page_suffix = "index.html"
+    #not_found_page   = "404.html"
+  }
+}
+
+
+
+resource "null_resource" "upload_folder_content" {
+ triggers = {
+   file_hashes = jsonencode({
+   for fn in fileset(var.folder_path, "**") :
+   fn => filesha256("${var.folder_path}/${fn}")
+   })
+ }
+
+ provisioner "local-exec" {
+   command = "./google-cloud-sdk/bin/gsutil cp -r ${var.folder_path}/* gs://${google_storage_bucket.static-site.name}/"
+ }
+
+}
+
+
+
+resource "google_storage_bucket_iam_member" "member" {
+  bucket = google_storage_bucket.static-site.name
+  role        = "roles/storage.objectViewer"
+  member      = "allUsers"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

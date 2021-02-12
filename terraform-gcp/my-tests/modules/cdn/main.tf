@@ -33,7 +33,7 @@ resource "google_storage_bucket" "static-site" {
   uniform_bucket_level_access = false
   website {
     main_page_suffix = "index.html"
-    #not_found_page   = "404.html"
+    not_found_page   = "404.html"
   }
 }
 
@@ -92,7 +92,7 @@ resource "google_compute_global_forwarding_rule" "default" {
   #network_tier          = "PREMIUM"
 }
 
-
+// ********************** a revoir si je dois utilisé http ou https proxy 
 resource "google_compute_target_https_proxy" "default" {
   name             = "test-proxy"
   url_map          = google_compute_url_map.default.id
@@ -154,10 +154,11 @@ resource "google_compute_backend_bucket" "default" {
 
 
 
-resource "google_compute_forwarding_rule" "default" {
+resource "google_compute_global_forwarding_rule" "default2" {
   name                  = "website-forwarding-rule"
   load_balancing_scheme = "EXTERNAL"
   port_range            = 80
+  target = google_compute_target_http_proxy.default.id 
   ip_address = google_compute_global_address.default.address
 }
 
@@ -172,22 +173,23 @@ resource "google_compute_url_map" "default2" {
   default_url_redirect {
     https_redirect = true
     strip_query    = false
+    #redirect_response_code = "TEMPORARY_REDIRECT"
   }  
 
-  host_rule {
-    hosts        = [google_dns_record_set.a.name]
-    path_matcher = "allpaths"
-  }
+#  host_rule {
+    #hosts        = ["*"]
+    #path_matcher = "allpaths"
+  #}
 
-  path_matcher {
-    name            = "allpaths"
+  #path_matcher {
+    #name            = "allpaths"
     
 
-    path_rule {
-      paths   = ["/*"]
+    #path_rule {
+      #paths   = ["/*"]
      
-    }
-  }
+    #}
+  #}
 }
 
 
@@ -214,12 +216,12 @@ resource "google_compute_url_map" "default2" {
 resource "google_compute_global_address" "default" {
   name = "global-appserver-ip"
 }
-
+// ****************** normally the name will be and input **** 
 data "google_dns_managed_zone" "default" {
   name     = "ahmedamine-soltani-lab-innovorder-dev"
 }
 
-
+// ********************* the name must be and input **********
 resource "google_dns_record_set" "a" {
   #name         = "lb.ahmedamine-soltani.lab.innovorder.dev.detect.tn."
   name         = "lb.${data.google_dns_managed_zone.default.dns_name}"
