@@ -1,0 +1,82 @@
+
+verify bucket domain
+https://support.google.com/webmasters/answer/9008080#domain_name_verification&zippy=%2Cdomain-name-provider%2Ctxt-record-instructions
+https://www.youtube.com/watch?v=bX6sxea5Rok
+https://www.youtube.com/watch?v=ACifzOIR_Ec
+https://cloud.google.com/storage/docs/domain-name-verification
+
+
+
+https://cloud.google.com/storage/docs/domain-name-verification#additional_verified_owners
+
+
+
+
+
+
+
+https://cloud.google.com/cdn/docs/setting-up-http-https-redirect
+
+
+
+
+
+a voir !!!!!!!!!!!!!!!!!!!!!!!!!
+google provider beta w google provider
+https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_versions
+
+
+
+tansech bech tu actives le cdn
+depends on
+
+
+
+even though it is the default, for clarity.
+
+
+the steps to use the module 
+
+These sections describe requirements for using this module.
+
+This module allows you to setting up a CDN on GCP 
+
+This module allow you to host a static website on Cloud Storage bucket for a domain you own behind a CDN on [Google Cloud Platform Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
+
+https://cloud.google.com/sdk/gcloud/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Upload files to the bucket
+resource "null_resource" "upload_folder_content" {
+  triggers = {
+    file_hashes = jsonencode({
+      for fn in fileset(var.folder_path, "**") :
+      fn => filesha256("${var.folder_path}/${fn}")
+    })
+  }
+
+  provisioner "local-exec" {
+    command = "gsutil cp -r ${var.folder_path}/* gs://${google_storage_bucket.bucket.name}/"
+  }
+
+}
