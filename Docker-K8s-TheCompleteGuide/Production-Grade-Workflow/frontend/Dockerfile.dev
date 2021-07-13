@@ -1,6 +1,7 @@
 FROM node:alpine
 WORKDIR /app
-COPY ./package.json .
-RUN npm install
-COPY . .
+#i comment this lines because i use mounted volume from my host machine
+#COPY ./package.json .
+#RUN npm install
+#COPY . .
 CMD [ "npm","run","start" ]

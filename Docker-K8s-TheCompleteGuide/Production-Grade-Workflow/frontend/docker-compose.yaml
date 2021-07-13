@@ -13,3 +13,12 @@ services:
           - .:/app
         ports: 
           - "3000:3000"
+    
+# second service to run tests (npm run test)
+    tests:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes: 
+            - .:/app
+        command: ["npm","run","test"]
