@@ -15,6 +15,7 @@ services:
           - "3000:3000"
     
 # second service to run tests (npm run test)
+# the probleme with this service that i can't interract with the npm run test menu i can't hit any buttom
     tests:
         build:
             context: .
