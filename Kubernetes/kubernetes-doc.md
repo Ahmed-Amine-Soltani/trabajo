@@ -309,7 +309,11 @@ customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.
 
 
 
-#### Enable kubectl [auto-completion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enable-kubectl-autocompletion)
+#### Enable kubectl [auto-completion](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/)
+Install bash-completion
+```bash
+[lw-k8s-master-1]$ yum install bash-completion
+```
 
 Source the completion script in your `~/.bashrc` file:
 
