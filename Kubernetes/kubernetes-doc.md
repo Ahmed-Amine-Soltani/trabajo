@@ -126,7 +126,14 @@ $ systemctl enable containerd
 ```
 
 ##### to install [crictl](https://github.com/kubernetes-sigs/cri-tools)
+Add /etc/crictl.yaml configuration :
 
+```bash
+runtime-endpoint: "unix:///run/containerd/containerd.sock"
+image-endpoint: "unix:///run/containerd/containerd.sock"
+timeout: 10
+debug: false
+```
 
 #### Install Kubernetes with [Kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
