@@ -16,8 +16,8 @@ Add a local DNS alias for our master server. Edit /etc/hosts file
 
 ```bash
 $ echo "
-master-ip-address lw-k8s-master-1   # change master-ip-address with your master node ip
-worker-ip-address lw-k8s-worker-1   # change worker-ip-address with your worker node ip
+master-ip-address k8s-master-1   # change master-ip-address with your master node ip
+worker-ip-address k8s-worker-1   # change worker-ip-address with your worker node ip
            ...
            ...
 " >> /etc/hosts
@@ -134,7 +134,7 @@ Install **[containerd](https://kubernetes.io/docs/setup/production-environment/c
 # Install required packages
 $ yum install -y yum-utils device-mapper-persistent-data lvm2
 
-# Add docker repository
+# Add docker repository ( it is necessary for the installation of containerd.io )
 $ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 # Install containerd
