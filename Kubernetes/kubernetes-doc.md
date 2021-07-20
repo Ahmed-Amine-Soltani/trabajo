@@ -125,6 +125,7 @@ $ systemctl restart containerd
 $ systemctl enable containerd
 ```
 
+### to install [crictl](https://github.com/kubernetes-sigs/cri-tools)
 
 
 #### Install Kubernetes with [Kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
@@ -307,7 +308,7 @@ customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.
 ...
 ```
 
-
+#### To install [calicocli](https://docs.projectcalico.org/getting-started/clis/calicoctl/install)
 
 #### Enable kubectl [auto-completion](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/)
 Install bash-completion
