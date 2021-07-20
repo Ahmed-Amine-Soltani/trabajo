@@ -50,32 +50,6 @@ $ sestatus
 SELinux status:                 disabled
 ```
 
-
-
-#### Setup firewall rules , Check required ports 
-
-Ensure that your hosts and firewalls allow the necessary traffic based on your configuration.
-
-**On Master Nodes** open the following ports and restart the service
-
-```bash
-# kubernetes https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports
-[lw-k8s-master-1]$ firewall-cmd --permanent --add-port={6443,2379-2380,10250,10251,10252}/tcp 
-# calico https://docs.projectcalico.org/getting-started/kubernetes/requirements
-[lw-k8s-master-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
-[lw-k8s-master-1]$ firewall-cmd --add-port=4789/udp --permanent
-[lw-k8s-master-1]$ firewall-cmd --reload
-```
-
-**On Worker Nodes** open the following ports and restart the service
-
-```bash
-[lw-k8s-worker-1]$ firewall-cmd --add-port={10250,30000-32767}/tcp --permanent
-[lw-k8s-worker-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
-[lw-k8s-worker-1]$ firewall-cmd --add-port=4789/udp --permanent
-[lw-k8s-worker-1]$ firewall-cmd --reload
-```
-
 Install bridge if not exist and enable it
 
 ```bash
@@ -181,6 +155,35 @@ $ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 # example : yum install  kubelet-1.20.0-0 kubectl-1.20.0-0 kubeadm-1.20.0-0 --disableexcludes=kubernetes
 $ systemctl enable --now kubelet
 ```
+
+
+
+
+#### Setup firewall rules , Check required ports 
+
+Ensure that your hosts and firewalls allow the necessary traffic based on your configuration.
+
+**On Master Nodes** open the following ports and restart the service
+
+```bash
+# kubernetes https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports
+[lw-k8s-master-1]$ firewall-cmd --permanent --add-port={6443,2379-2380,10250,10251,10252}/tcp 
+# calico https://docs.projectcalico.org/getting-started/kubernetes/requirements
+[lw-k8s-master-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
+[lw-k8s-master-1]$ firewall-cmd --add-port=4789/udp --permanent
+[lw-k8s-master-1]$ firewall-cmd --reload
+```
+
+**On Worker Nodes** open the following ports and restart the service
+
+```bash
+[lw-k8s-worker-1]$ firewall-cmd --add-port={10250,30000-32767}/tcp --permanent
+[lw-k8s-worker-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
+[lw-k8s-worker-1]$ firewall-cmd --add-port=4789/udp --permanent
+[lw-k8s-worker-1]$ firewall-cmd --reload
+```
+
+
 
 ​                 
 
