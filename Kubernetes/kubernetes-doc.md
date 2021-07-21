@@ -428,7 +428,7 @@ We need to validate that our cluster is working by deploying a simple applicatio
 
 ```bash
 [lw-k8s-master-1]$ kubectl apply -f https://raw.githubusercontent.com/Ahmed-Amine-Soltani/trabajo/main/Kubernetes/deployment-test.yml
-deployment.apps/web created
+deployment.apps/nginx-deployment created
 service/web created
 ```
 
