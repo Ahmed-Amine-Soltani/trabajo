@@ -16,8 +16,8 @@ Add a local DNS alias for our master server. Edit /etc/hosts file
 
 ```bash
 $ echo "
-master-ip-address lw-k8s-master-1   # change master-ip-address with your master node ip
-worker-ip-address lw-k8s-worker-1   # change worker-ip-address with your worker node ip
+master-ip-address k8s-master-1   # change master-ip-address with your master node ip
+worker-ip-address k8s-worker-1   # change worker-ip-address with your worker node ip
            ...
            ...
 " >> /etc/hosts
@@ -48,32 +48,6 @@ Mem:           4.7G        265M        4.1G        8.6M        312M        4.2G
 Swap:            0B          0B          0B
 $ sestatus 
 SELinux status:                 disabled
-```
-
-
-
-#### Setup firewall rules , Check required ports 
-
-Ensure that your hosts and firewalls allow the necessary traffic based on your configuration.
-
-**On Master Nodes** open the following ports and restart the service
-
-```bash
-# kubernetes https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports
-[lw-k8s-master-1]$ firewall-cmd --permanent --add-port={6443,2379-2380,10250,10251,10252}/tcp 
-# calico https://docs.projectcalico.org/getting-started/kubernetes/requirements
-[lw-k8s-master-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
-[lw-k8s-master-1]$ firewall-cmd --add-port=4789/udp --permanent
-[lw-k8s-master-1]$ firewall-cmd --reload
-```
-
-**On Worker Nodes** open the following ports and restart the service
-
-```bash
-[lw-k8s-worker-1]$ firewall-cmd --add-port={10250,30000-32767}/tcp --permanent
-[lw-k8s-worker-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
-[lw-k8s-worker-1]$ firewall-cmd --add-port=4789/udp --permanent
-[lw-k8s-worker-1]$ firewall-cmd --reload
 ```
 
 Install bridge if not exist and enable it
@@ -134,7 +108,7 @@ Install **[containerd](https://kubernetes.io/docs/setup/production-environment/c
 # Install required packages
 $ yum install -y yum-utils device-mapper-persistent-data lvm2
 
-# Add docker repository
+# Add docker repository ( it is necessary for the installation of containerd.io )
 $ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 # Install containerd
@@ -151,7 +125,15 @@ $ systemctl restart containerd
 $ systemctl enable containerd
 ```
 
+##### to install [crictl](https://github.com/kubernetes-sigs/cri-tools)
+Add /etc/crictl.yaml configuration :
 
+```bash
+runtime-endpoint: "unix:///run/containerd/containerd.sock"
+image-endpoint: "unix:///run/containerd/containerd.sock"
+timeout: 10
+debug: false
+```
 
 #### Install Kubernetes with [Kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
@@ -181,6 +163,35 @@ $ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 # example : yum install  kubelet-1.20.0-0 kubectl-1.20.0-0 kubeadm-1.20.0-0 --disableexcludes=kubernetes
 $ systemctl enable --now kubelet
 ```
+
+
+
+
+#### Setup firewall rules , Check required ports 
+
+Ensure that your hosts and firewalls allow the necessary traffic based on your configuration.
+
+**On Master Nodes** open the following ports and restart the service
+
+```bash
+# kubernetes https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports
+[lw-k8s-master-1]$ firewall-cmd --permanent --add-port={6443,2379-2380,10250,10251,10252}/tcp 
+# calico https://docs.projectcalico.org/getting-started/kubernetes/requirements
+[lw-k8s-master-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
+[lw-k8s-master-1]$ firewall-cmd --add-port=4789/udp --permanent
+[lw-k8s-master-1]$ firewall-cmd --reload
+```
+
+**On Worker Nodes** open the following ports and restart the service
+
+```bash
+[lw-k8s-worker-1]$ firewall-cmd --add-port={10250,30000-32767}/tcp --permanent
+[lw-k8s-worker-1]$ firewall-cmd --add-port={5473,179}/tcp --permanent
+[lw-k8s-worker-1]$ firewall-cmd --add-port=4789/udp --permanent
+[lw-k8s-worker-1]$ firewall-cmd --reload
+```
+
+
 
 ​                 
 
@@ -304,9 +315,13 @@ customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.
 ...
 ```
 
+##### To install [calicocli](https://docs.projectcalico.org/getting-started/clis/calicoctl/install)
 
-
-#### Enable kubectl [auto-completion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enable-kubectl-autocompletion)
+#### Enable kubectl [auto-completion](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/)
+Install bash-completion
+```bash
+[lw-k8s-master-1]$ yum install bash-completion
+```
 
 Source the completion script in your `~/.bashrc` file:
 
