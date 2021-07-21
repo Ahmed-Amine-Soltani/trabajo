@@ -427,7 +427,7 @@ kube-system   kube-scheduler-lw-k8s-master-1             1/1     Running       0
 We need to validate that our cluster is working by deploying a simple application. On **Master Node** create a new deployment
 
 ```bash
-[lw-k8s-master-1]$ kubectl apply -f https://raw.githubusercontent.com/Ahmed-Amine-Soltani/markdown-language-demo/master/test.yaml
+[lw-k8s-master-1]$ kubectl apply -f https://raw.githubusercontent.com/Ahmed-Amine-Soltani/trabajo/main/Kubernetes/deployment-test.yml
 deployment.apps/web created
 service/web created
 ```
@@ -435,11 +435,11 @@ service/web created
 Check deployments to verify if it is running
 
 ```bash
-[lw-k8s-master-1]$ kubectl get deployment web 
-NAME   READY   UP-TO-DATE   AVAILABLE   AGE
-web    1/1     1            1           5m
+[lw-k8s-master-1]$ kubectl get deployment nginx-deployment
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   2/2     2            2           4m9s
 ```
-
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! old configuration
 Check services
 
 ```bash
