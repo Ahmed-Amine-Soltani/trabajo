@@ -12,7 +12,7 @@ Become root and update and upgrade the system.
 $ yum -y update && yum upgrade -y
 ```
 
-Add a local DNS alias for our master server. Edit /etc/hosts file 
+Add a local DNS alias for our master server. Edit /etc/hosts file (comment the line that begins with 127.0.1.1 + host name)
 
 ```bash
 $ echo "
