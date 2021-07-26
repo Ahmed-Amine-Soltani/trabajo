@@ -267,6 +267,14 @@ kubeadm join lw-k8s-master-1:6443 --token ptpsml.0p5ah2mg9q25yzo8 \
 
 ```
 
+If you want to reset your kubeadm init
+
+```bash
+[lw-k8s-master-1]$ kubeadm reset
+```
+
+
+
 To start using your cluster
 
 ```bash
