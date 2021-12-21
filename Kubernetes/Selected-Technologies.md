@@ -40,7 +40,7 @@ For the [Pod Networking Choices](https://kubernetes.io/docs/concepts/cluster-adm
 
 
 
-<p align="center"> <img src="https://i.ibb.co/NYbgMw9/Screenshot-from-2021-01-04-19-12-07.png" alt="Screenshot-from-2021-01-04-19-12-07" border="0"> </p>
+<p align="center"> <img src="https://avatars.githubusercontent.com/u/12304728?s=280&v=4" alt="Screenshot-from-2021-01-04-19-12-07" border="0"> </p>
 
 
 
