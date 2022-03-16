@@ -471,3 +471,8 @@ Test the deployment
 [lw-k8s-master-1]$ curl lw-k8s-worker-1:32144
 Hello Kubernetes bootcamp! | Running on: web-78449d97f9-xw77c | v=1
 ```
+
+# maryouma
+```bash
+bjr tlm
+```
